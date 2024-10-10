@@ -1,1 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Itinerary Generator</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Travel Itinerary Generator</h1>
+        <form id="itineraryForm">
+            <label for="place">Enter a Place:</label>
+            <input type="text" id="place" name="place" required>
+            <button type="submit">Generate Itinerary</button>
+        </form>
+        <div id="itineraryResult"></div>
+    </div>
 
+    <script>
+        $(document).ready(function() {
+            $('#itineraryForm').submit(function(event) {
+                event.preventDefault(); // Prevent the default form submission
+                
+                const place = $('#place').val(); // Get user input
+                $('#itineraryResult').empty(); // Clear previous results
+
+                $.post('/generate-itinerary', { place: place }, function(data) {
+                    if (data.Error) {
+                        $('#itineraryResult').html(`<p class="error">${data.Error}</p>`);
+                    } else {
+                        let output = '';
+                        for (const [cluster, itinerary] of Object.entries(data)) {
+                            output += `<h2>${cluster}</h2>`;
+                            output += `<p><strong>Vibe:</strong> ${itinerary.Vibe}</p>`;
+                            output += '<div class="itinerary-details">';
+                            for (const [day, details] of Object.entries(itinerary.Details)) {
+                                output += `<h3>${day}</h3><p>${details}</p>`;
+                            }
+                            output += '</div>';
+                        }
+                        $('#itineraryResult').html(output);
+                    }
+                }).fail(function() {
+                    $('#itineraryResult').html('<p class="error">An error occurred while generating the itinerary.</p>');
+                });
+            });
+        });
+    </script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 15px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #218838;
+        }
+        .error {
+            color: red;
+        }
+        .itinerary-details {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: #f9f9f9;
+        }
+    </style>
+</body>
+</html>
