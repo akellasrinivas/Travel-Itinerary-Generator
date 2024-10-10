@@ -4,16 +4,11 @@
 This is a Travel Itinerary Generator web application that generates personalized itineraries based on user input and enriched travel data using clustering techniques. It is built with Node.js for the backend, Python for AI/ML, and a simple HTML/CSS frontend. The clustering algorithm, powered by KMeans, groups travel itineraries based on expenses, travel vibes, and package amounts.
 
  # Table of Contents
-Technologies
-Features
-System Architecture
-Setup Instructions
-Prerequisites
-Local Installation
-Running the Application
-Testing the Solution
-AWS Deployment (Optional)
-Project Structure
+Technologies,
+Features,
+System Architecture,
+Setup Instructions,
+Prerequisites,
 # Technologies
 Backend: Node.js, Express
 AI/ML: Python, KMeans clustering (with scikit-learn)
